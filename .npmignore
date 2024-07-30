@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.git
+.gitignore
+
+src
+tests
+*.log
+*.ts
+*.tsx

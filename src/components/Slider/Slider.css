@@ -1,0 +1,5 @@
+.xellanix-slider:focus {
+    outline: 3px solid var(--text-color) !important;
+    outline-offset: 4px !important;
+    border-radius: 4px;
+}
