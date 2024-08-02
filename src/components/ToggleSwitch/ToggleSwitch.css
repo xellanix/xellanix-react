@@ -1,8 +1,8 @@
 .xellanix-toggle-switch {
     background-color: var(--separator-color);
-    height: 20px;
+    height: 1em;
     aspect-ratio: 9/4;
-    padding: 4px;
+    padding: .2215em;
     border-radius: 999px;
     position: relative;
     cursor: pointer;
