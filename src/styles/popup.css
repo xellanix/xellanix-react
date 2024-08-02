@@ -55,17 +55,17 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	gap: 8px;
+	gap: .4em;
 	align-self: center;
 	flex: 1 1 0;
 	color: inherit;
 	margin-left: calc(var(--section-gap-horizontal) + 40px);
 }
 .popup .icon-landscape > img {
-	height: 24px;
+	height: 1.2em;
 }
 .popup .icon-landscape > div {
-	font-size: 20px;
+	font-size: 1em;
 	font-weight: 700;
 }
 
