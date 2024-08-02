@@ -38,6 +38,7 @@ return (
 - `PopupProvider`
 - `Slider`
 - `SliderInput` (slider text input for `Slider` component)
+- `ToggleSwitch`
 
 ## Available Types and Enums
 - `InfoStatus` (for `InfoBox` component `status`)

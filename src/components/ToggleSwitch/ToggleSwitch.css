@@ -1,0 +1,40 @@
+.xellanix-toggle-switch {
+    background-color: var(--separator-color);
+    height: 20px;
+    aspect-ratio: 9/4;
+    padding: 4px;
+    border-radius: 999px;
+    position: relative;
+    cursor: pointer;
+
+    transition-property: background-color, left;
+    transition-duration: 133ms;
+    transition-timing-function: ease-out;
+}
+
+.xellanix-toggle-switch.on {
+    background-color: var(--accent-color);
+}
+
+.xellanix-toggle-switch:focus-visible {
+    outline: 3px solid var(--text-color) !important;
+    outline-offset: 2px !important;
+    border-radius: 999px;
+}
+
+.xellanix-toggle-switch-handle {
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-color: var(--primary-background-color);
+    border-radius: 999px;
+    position: relative;
+    left: 0;
+
+    transition-property: background-color, left;
+    transition-duration: 133ms;
+    transition-timing-function: ease-out;
+}
+
+.on > .xellanix-toggle-switch-handle {
+    left: 55.55555555555555555555555555555555%;
+}

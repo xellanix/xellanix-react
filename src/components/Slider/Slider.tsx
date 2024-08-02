@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./Slider.css";
+import { HTMLProps } from "../../shared";
 
 type SliderInputRef = {
     sliderInputRef?: React.RefObject<HTMLInputElement>;
@@ -9,7 +10,7 @@ type SliderProps = {
     min: number;
     max: number;
     step: number;
-    initialValue: number;
+    defaultValue: number;
 };
 
 type SliderOptionalProps = {
@@ -40,7 +41,11 @@ const updateValue = (
     }
 };
 
-export function SliderInput({ sliderInputRef, ...props }: SliderInputRef & React.HTMLAttributes<HTMLInputElement>) {
+export function SliderInput({
+    sliderInputRef,
+    style,
+    ...props
+}: HTMLProps<HTMLInputElement, SliderInputRef>) {
     useEffect(() => {
         const el = sliderInputRef!.current;
 
@@ -63,7 +68,13 @@ export function SliderInput({ sliderInputRef, ...props }: SliderInputRef & React
     }, []);
 
     return (
-        <input ref={sliderInputRef} type="number" pattern="-?[0-9]+" style={{ width: "96px" }} {...props} />
+        <input
+            ref={sliderInputRef}
+            type="number"
+            pattern="-?[0-9]+"
+            style={{ ...{ width: "96px" }, ...style }}
+            {...props}
+        />
     );
 }
 
@@ -72,28 +83,35 @@ export default function Slider({
     min,
     max,
     step,
-    initialValue,
+    defaultValue,
     onChange,
     onDeferredChange,
     className,
+    style,
     ...props
-}: DetailedSliderProps & React.HTMLAttributes<HTMLDivElement>) {
+}: HTMLProps<HTMLDivElement, DetailedSliderProps>) {
     const sliderRef = useRef<HTMLDivElement>(null);
     const thumbRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        updateValue(sliderRef.current, thumbRef.current, Math.max(Math.min(initialValue, max), min), min, max);
+        updateValue(
+            sliderRef.current,
+            thumbRef.current,
+            Math.max(Math.min(defaultValue, max), min),
+            min,
+            max
+        );
 
         const inputCurrent = sliderInputRef?.current;
         if (inputCurrent) {
             inputCurrent.min = min.toString();
             inputCurrent.max = max.toString();
-            inputCurrent.value = initialValue.toString();
+            inputCurrent.value = defaultValue.toString();
         }
 
-        onChange?.(initialValue);
-        onDeferredChange?.(initialValue);
-    }, [initialValue, min, max]);
+        onChange?.(defaultValue);
+        onDeferredChange?.(defaultValue);
+    }, [defaultValue, min, max]);
 
     useEffect(() => {
         const inputCurrent = sliderInputRef?.current;
@@ -107,8 +125,8 @@ export default function Slider({
             mousePos = 0,
             sliderWidth = 0,
             containerWidth = 0,
-            currentValue = initialValue,
-            deferredValue = initialValue;
+            currentValue = defaultValue,
+            deferredValue = defaultValue;
 
         const handleMove = (event: MouseEvent | TouchEvent) => {
             event.preventDefault();
@@ -203,7 +221,13 @@ export default function Slider({
 
         const handleInputType = (event: Event) => {
             const target = Number((event.target as HTMLInputElement).value);
-            updateValue(sliderRef.current, thumbRef.current, Math.max(Math.min(target, max), min), min, max);
+            updateValue(
+                sliderRef.current,
+                thumbRef.current,
+                Math.max(Math.min(target, max), min),
+                min,
+                max
+            );
 
             onChange?.(target);
         };
@@ -229,41 +253,12 @@ export default function Slider({
 
     return (
         <div
-            className={`xellanix-slider ${className ?? ""}`}
+            className={"xellanix-slider" + (className ? " " + className : "")}
             tabIndex={0}
-            style={{
-                width: "100%",
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-            }}
+            style={style}
             {...props}>
-            <div
-                ref={sliderRef}
-                style={{
-                    width: "calc(100% - 16px)",
-                    margin: "0 8px",
-                    height: "6px",
-                    borderRadius: "9999px",
-                    position: "absolute",
-                    background: "var(--ternary-background-color2)",
-                }}
-            />
-            <div
-                ref={thumbRef}
-                style={{
-                    width: "16px",
-                    height: "16px",
-                    border: "4px solid var(--accent-color)",
-                    borderRadius: "9999px",
-                    backgroundColor: "var(--primary-background-color)",
-                    position: "relative",
-                    cursor: "pointer",
-                    WebkitUserSelect: "none",
-                    userSelect: "none",
-                    left: "0%",
-                }}
-            />
+            <div className="xellanix-slider-bar" ref={sliderRef} />
+            <div className="xellanix-slider-thumb" ref={thumbRef} />
         </div>
     );
 }

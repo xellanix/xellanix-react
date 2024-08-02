@@ -1,5 +1,38 @@
-.xellanix-slider:focus {
+.xellanix-slider {
+    --xellanix-slider-thumb-size: 16px;
+
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.xellanix-slider:focus-visible {
     outline: 3px solid var(--text-color) !important;
     outline-offset: 4px !important;
     border-radius: 4px;
+}
+
+.xellanix-slider > * {
+    border-radius: 9999px;
+}
+
+.xellanix-slider-bar {
+    width: calc(100% - var(--xellanix-slider-thumb-size));
+    margin: 0 calc(var(--xellanix-slider-thumb-size) / 2);
+    height: 6px;
+    position: absolute;
+    background: var(--ternary-background-color2);
+}
+
+.xellanix-slider-thumb {
+    width: var(--xellanix-slider-thumb-size);
+    height: var(--xellanix-slider-thumb-size);
+    border: 4px solid var(--accent-color);
+    background-color: var(--primary-background-color);
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    left: 0%;
 }
