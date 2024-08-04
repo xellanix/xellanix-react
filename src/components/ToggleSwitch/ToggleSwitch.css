@@ -35,6 +35,10 @@
     transition-timing-function: ease-out;
 }
 
+.dark-theme .xellanix-toggle-switch-handle {
+    background-color: var(--accent-button-text-color);
+}
+
 .on > .xellanix-toggle-switch-handle {
     left: 55.55555555555555555555555555555555%;
 }

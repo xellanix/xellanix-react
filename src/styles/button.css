@@ -76,7 +76,7 @@ button {
 
 .button.success {
     background-color: var(--success-color);
-    color: var(--secondary-background-color);
+    color: var(--accent-button-text-color);
     border: 0px;
 }
 .button.success:hover {
@@ -85,7 +85,7 @@ button {
 
 .button.warning {
     background-color: var(--warning-color);
-    color: var(--secondary-background-color);
+    color: var(--accent-button-text-color);
     border: 0px;
 }
 .button.warning:hover {
@@ -94,7 +94,7 @@ button {
 
 .button.error {
     background-color: var(--error-color);
-    color: var(--secondary-background-color);
+    color: var(--accent-button-text-color);
     border: 0px;
 }
 .button.error:hover {

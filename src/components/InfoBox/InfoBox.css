@@ -1,0 +1,26 @@
+.xellanix-info-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5em;
+    border-radius: var(--button-border-radius);
+    padding: 1em;
+    align-self: stretch;
+}
+
+.xellanix-info-box * {
+    text-wrap: wrap;
+}
+
+.xellanix-info-box-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-background-color);
+    width: 1.5em;
+    aspect-ratio: 1 / 1;
+    border-radius: 9999px;
+    padding: .33333333333333333333em;
+    box-sizing: border-box;
+    margin-right: .125em;
+}

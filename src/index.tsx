@@ -4,7 +4,6 @@ import "./styles/nav-styles.css";
 import "./styles/flex-align.css";
 import "./styles/text-align.css";
 import "./styles/popup.css";
-import "./styles/info-box.css";
 import "./styles/button.css";
 import "./styles/media-styles.css";
 

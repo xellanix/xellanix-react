@@ -36,3 +36,7 @@
     user-select: none;
     left: 0%;
 }
+
+.dark-theme .xellanix-slider-thumb {
+    background-color: var(--accent-button-text-color);
+}

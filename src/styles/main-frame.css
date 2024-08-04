@@ -29,8 +29,8 @@ html {
 	--error-color-hover: #ff2a2a;
 	--error-color-active: #de0101;
 	--error-background-color: rgba(232, 30, 30, 0.15);
-	--warning-color: #e8a21e;
-	--warning-color-hover: #ffb52a;
+	--warning-color: #d68b00;
+	--warning-color-hover: #ffa90a;
 	--warning-color-active: #de9201;
 	--warning-background-color: rgba(232, 162, 30, 0.15);
 	--success-color: #59a310;
@@ -56,20 +56,20 @@ html {
 	--separator-color2: #666666;
 	--accent-button-text-color: #e6e6e6;
 
-	--accent-color: #4dc3ff;
-	--accent-color-hover: #76d1ff;
-	--accent-color-active: #35aae5;
+	--accent-color: #1ab2ff;
+	--accent-color-hover: #4dc3ff;
+	--accent-color-active: #34aae5;
 
 	--error-color: #ff6060;
 	--error-color-hover: #ff7676;
 	--error-color-active: #e53535;
 	--error-background-color: rgba(255, 96, 96, 0.15);
-	--warning-color: #e8a21e;
-	--warning-color-hover: #ffcf76;
-	--warning-color-active: #e5a835;
+	--warning-color: #d18c0a;
+	--warning-color-hover: #f4a81a;
+	--warning-color-active: #e5a734;
 	--warning-background-color: rgba(232, 162, 30, 0.15);
-	--success-color: #7ad123;
-	--success-color-hover: #bbff76;
+	--success-color: #73c421;
+	--success-color-hover: #8cde3b;
 	--success-color-active: #8de535;
 	--success-background-color: rgba(122, 209, 35, 0.15);
 	--information-color: var(--accent-color);
