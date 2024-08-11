@@ -1,9 +1,72 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import "./Slider.css";
 import { HTMLProps } from "../../shared";
 
+type ElementUpdaterCallback = (min: number, max: number, step: number, value: number) => void;
+type SliderRefEvent = ((value: number) => void) | null;
+
+export class SliderRef {
+    public constructor(min?: number, max?: number, step?: number, defaultValue?: number) {
+        this.init(min, max, step, defaultValue);
+    }
+
+    public get(type: "min" | "max" | "step" | "value"): number {
+        return this[("_" + type) as keyof this] as unknown as number;
+    }
+
+    public set(type: "min" | "max" | "step" | "value", value: number) {
+        (this[("_" + type) as keyof this] as unknown as number) = value;
+
+        this._elementUpdater.forEach((callback) =>
+            callback(this._min, this._max, this._step, this._value)
+        );
+    }
+
+    public init(min?: number, max?: number, step?: number, value?: number) {
+        if (min) this._min = min;
+        if (max) this._max = max;
+        if (step) this._step = step;
+        if (value) this._value = value;
+    }
+
+    public callback(type: "change" | "input", fn: SliderRefEvent) {
+        (this[("_" + type + "Event") as keyof this] as unknown as SliderRefEvent) = fn;
+    }
+
+    public removeCallback(type: "change" | "input" | "all") {
+        if (type === "all") {
+            this._changeEvent = null;
+            this._inputEvent = null;
+        } else {
+            this.callback(type, null);
+        }
+    }
+
+    public fireCallback(type: "change" | "input", value: number) {
+        (this[("_" + type + "Event") as keyof this] as unknown as SliderRefEvent)?.(value);
+    }
+
+    public elementUpdater(callback: ElementUpdaterCallback) {
+        this._elementUpdater.push(callback);
+    }
+
+    public removeElementUpdater(callback: ElementUpdaterCallback) {
+        this._elementUpdater = this._elementUpdater.filter((el) => el !== callback);
+    }
+
+    private _value: number = 0;
+    private _min: number = 0;
+    private _max: number = 100;
+    private _step: number = 1;
+
+    private _changeEvent: SliderRefEvent = null;
+    private _inputEvent: SliderRefEvent = null;
+
+    private _elementUpdater: ElementUpdaterCallback[] = [];
+}
+
 type SliderInputRef = {
-    sliderInputRef?: React.RefObject<HTMLInputElement>;
+    sliderInputRef?: React.RefObject<SliderRef>;
 };
 
 type SliderProps = {
@@ -21,6 +84,10 @@ type SliderOptionalProps = {
 };
 
 type DetailedSliderProps = SliderInputRef & SliderProps & SliderOptionalProps;
+
+export const useSlider = () => {
+    return useRef<SliderRef>(new SliderRef());
+};
 
 const updateValue = (
     slider: HTMLDivElement | null,
@@ -46,30 +113,59 @@ export function SliderInput({
     style,
     ...props
 }: HTMLProps<HTMLInputElement, SliderInputRef>) {
+    const inputRef = useRef<HTMLInputElement>(null);
+
     useEffect(() => {
-        const el = sliderInputRef!.current;
+        const el = inputRef?.current;
+        const sliderRef = sliderInputRef?.current;
 
-        const handleChange = (event: Event) => {
+        const normalizeNegative = (event: Event) => {
             const target = event.target as HTMLInputElement;
-
             let value = Number(target.value);
+            const isNaN = Number.isNaN(value);
 
-            if (!Number.isNaN(value))
-                value = Math.max(Number(target.min), Math.min(Number(target.max), value));
+            if (!isNaN) value = Math.max(Number(target.min), Math.min(Number(target.max), value));
 
-            target.value = Number.isNaN(value) ? "-" : value.toString();
+            target.value = isNaN ? "-" : value.toString();
+            sliderRef?.fireCallback("change", isNaN ? 0 : value);
+        };
+
+        const fireInput = (ev: Event) => {
+            const value = (ev.target as HTMLInputElement).valueAsNumber;
+
+            !Number.isNaN(value) && sliderRef?.fireCallback("input", value);
+        };
+
+        const elementUpdater = (min: number, max: number, step: number, value: number) => {
+            if (el) {
+                el.min = min.toString();
+                el.max = max.toString();
+                el.step = step.toString();
+                el.value = value.toString();
+            }
         };
 
         if (el) {
-            el.addEventListener("change", handleChange);
+            // default
+            el.addEventListener("change", normalizeNegative);
+            el.addEventListener("input", fireInput);
         }
 
-        return () => el?.removeEventListener("change", handleChange);
+        sliderRef?.elementUpdater(elementUpdater);
+
+        return () => {
+            if (el) {
+                el.removeEventListener("change", normalizeNegative);
+                el.removeEventListener("input", fireInput);
+            }
+
+            sliderRef?.removeElementUpdater(elementUpdater);
+        };
     }, []);
 
     return (
         <input
-            ref={sliderInputRef}
+            ref={inputRef}
             type="number"
             pattern="-?[0-9]+"
             style={{ ...{ width: "96px" }, ...style }}
@@ -93,6 +189,8 @@ export default function Slider({
     const sliderRef = useRef<HTMLDivElement>(null);
     const thumbRef = useRef<HTMLDivElement>(null);
 
+    const dataRef = useRef({ min: min, max: max, step: step });
+
     useEffect(() => {
         updateValue(
             sliderRef.current,
@@ -102,23 +200,12 @@ export default function Slider({
             max
         );
 
-        const inputCurrent = sliderInputRef?.current;
-        if (inputCurrent) {
-            inputCurrent.min = min.toString();
-            inputCurrent.max = max.toString();
-            inputCurrent.value = defaultValue.toString();
-        }
+        dataRef.current = { min: min, max: max, step: step };
 
-        onChange?.(defaultValue);
-        onDeferredChange?.(defaultValue);
+        sliderInputRef?.current?.init(min, max, step, defaultValue);
     }, [defaultValue, min, max]);
 
-    useEffect(() => {
-        const inputCurrent = sliderInputRef?.current;
-        if (inputCurrent) {
-            inputCurrent.step = step.toString();
-        }
-    }, [step]);
+    useEffect(() => sliderInputRef?.current?.set("step", step), [step]);
 
     useEffect(() => {
         let lastThumbPos = 0,
@@ -127,6 +214,12 @@ export default function Slider({
             containerWidth = 0,
             currentValue = defaultValue,
             deferredValue = defaultValue;
+
+        const setNewValue = (newValue: number) => {
+            currentValue = newValue;
+            onChange?.(newValue);
+            sliderInputRef?.current?.set("value", newValue);
+        };
 
         const handleMove = (event: MouseEvent | TouchEvent) => {
             event.preventDefault();
@@ -139,20 +232,20 @@ export default function Slider({
                     Math.max(lastThumbPos + (clientX - mousePos), 0),
                     sliderWidth
                 );
-                let finalValue = (newLeft / sliderWidth) * (max - min) + min;
-                finalValue = Math.round(finalValue / step) * step;
+
+                const _min = dataRef.current.min;
+                const _max = dataRef.current.max;
+                const _step = dataRef.current.step;
+
+                let finalValue = (newLeft / sliderWidth) * (_max - _min) + _min;
+                finalValue = Math.round(finalValue / _step) * _step;
 
                 if (finalValue !== currentValue) {
-                    currentValue = finalValue;
+                    setNewValue(finalValue);
 
                     thumbRef.current.style.left = `${(newLeft / containerWidth) * 100}%`;
                     const cssPercent = (newLeft / sliderWidth) * 100;
                     sliderRef.current.style.background = `linear-gradient(90deg, var(--accent-color) 0%, var(--accent-color) ${cssPercent}%, var(--ternary-background-color2) ${cssPercent}%, var(--ternary-background-color2) 100%)`;
-
-                    onChange?.(finalValue);
-                    if (sliderInputRef?.current) {
-                        sliderInputRef.current.value = finalValue.toString();
-                    }
                 }
             }
         };
@@ -190,9 +283,14 @@ export default function Slider({
                 currentValue += step;
             } else return;
 
-            updateValue(sliderRef.current, thumbRef.current, currentValue, min, max);
-            onChange?.(currentValue);
-            if (sliderInputRef?.current) sliderInputRef.current.value = currentValue.toString();
+            updateValue(
+                sliderRef.current,
+                thumbRef.current,
+                currentValue,
+                dataRef.current.min,
+                dataRef.current.max
+            );
+            setNewValue(currentValue);
         };
 
         const handleKeyUp = (event: KeyboardEvent) => {
@@ -212,42 +310,34 @@ export default function Slider({
             }
         };
 
-        const handleInputChange = (event: Event) => {
-            const target = event.currentTarget as HTMLInputElement;
-
-            onChange?.(Number(target.value));
-            onDeferredChange?.(Number(target.value));
-        };
-
-        const handleInputType = (event: Event) => {
-            const target = Number((event.target as HTMLInputElement).value);
+        sliderInputRef?.current?.callback("change", (event: number) => {
+            onDeferredChange?.(event);
+            setNewValue(event);
+        });
+        sliderInputRef?.current?.callback("input", (event: number) => {
             updateValue(
                 sliderRef.current,
                 thumbRef.current,
-                Math.max(Math.min(target, max), min),
-                min,
-                max
+                Math.max(Math.min(event, dataRef.current.max), dataRef.current.min),
+                dataRef.current.min,
+                dataRef.current.max
             );
 
-            onChange?.(target);
-        };
+            setNewValue(event);
+        });
 
         thumbRef.current?.addEventListener("mousedown", handleDown);
         thumbRef.current?.addEventListener("touchstart", handleDown);
         thumbRef.current?.parentElement?.addEventListener("keydown", handleKeyDown);
         thumbRef.current?.parentElement?.addEventListener("keyup", handleKeyUp);
 
-        sliderInputRef?.current?.addEventListener("input", handleInputType);
-        sliderInputRef?.current?.addEventListener("change", handleInputChange);
-
         return () => {
+            sliderInputRef?.current?.removeCallback("all");
+
             thumbRef.current?.removeEventListener("mousedown", handleDown);
             thumbRef.current?.removeEventListener("touchstart", handleDown);
             thumbRef.current?.parentElement?.removeEventListener("keydown", handleKeyDown);
             thumbRef.current?.parentElement?.removeEventListener("keyup", handleKeyUp);
-
-            sliderInputRef?.current?.removeEventListener("input", handleInputType);
-            sliderInputRef?.current?.removeEventListener("change", handleInputChange);
         };
     }, []);
 
