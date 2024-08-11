@@ -1,6 +1,6 @@
 # Xellanix Stylesheets and Components for React
 
-## Install and Use
+## Installation and Setup
 - To install this package, run this command on the terminal:
 ```
 pnpm i xellanix-react
@@ -11,6 +11,17 @@ pnpm i xellanix-react
 import "xellanix-react/style.css";
 ```
 
+- Add the `light-theme` or `dark-theme` class in the `body` tag. 
+- Add the `body-wrapper` class to the `div` tag, which is a child of the `body` tag (commonly used as the root for React), so that it looks at least like this.
+- Once all the required classes have been added, it should at least look like this.
+``` html
+<body class="light-theme">
+    <div class="body-wrapper" id="root"></div>
+    <!-- OTHER SCRIPTS -->
+</body>
+```
+
+## Usage
 - To use the component, just import it like this:
 ``` tsx
 import { Slider } from "xellanix-react";
