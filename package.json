@@ -1,6 +1,6 @@
 {
 	"name": "xellanix-react",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"description": "A react stylesheet and components from xellanix",
 	"main": "dist/xellanix.umd.js",
 	"module": "dist/xellanix.es.js",

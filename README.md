@@ -56,3 +56,4 @@ return (
 
 ## Available Hooks
 - `usePopup` (`PopupProvider` hook)
+- `useSlider` (`Slider` ref hook)
