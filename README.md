@@ -44,6 +44,8 @@ return (
 )
 ```
 
+For more information, please see the available [**documentation**](https://xellanix.github.io/xellanix-react-docs/).
+
 ## Available Components
 - `InfoBox`
 - `PopupProvider`

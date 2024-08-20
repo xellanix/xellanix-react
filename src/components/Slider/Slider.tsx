@@ -346,6 +346,7 @@ export default function Slider({
             className={"xellanix-slider" + (className ? " " + className : "")}
             tabIndex={0}
             style={style}
+            role="slider"
             {...props}>
             <div className="xellanix-slider-bar" ref={sliderRef} />
             <div className="xellanix-slider-thumb" ref={thumbRef} />

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useId } from "react";
 import "./ToggleSwitch.css";
 import { HTMLProps } from "../../shared";
 
@@ -17,6 +17,8 @@ export default function ToggleSwitch({
     defaultValue = false,
     ...props
 }: HTMLProps<HTMLDivElement, ToggleSwitchProps>) {
+    const controlId = useId();
+
     const clickHandle = useCallback(({ currentTarget }: React.UIEvent<HTMLDivElement>) => {
         const isOn = currentTarget.classList.toggle("on");
         onChange?.(isOn);
@@ -31,7 +33,7 @@ export default function ToggleSwitch({
 
     return (
         <div className="horizontal-layout flex-align-middle small-gap">
-            {label && labelPosition === "before" && <label>{label}</label>}
+            {label && labelPosition === "before" && <label id={`tsl-${controlId}`}>{label}</label>}
             <div
                 className={
                     "xellanix-toggle-switch" +
@@ -41,6 +43,8 @@ export default function ToggleSwitch({
                 tabIndex={0}
                 onClick={clickHandle}
                 onKeyDown={keyDownHandle}
+                role="switch"
+                aria-labelledby={`tsl-${controlId}`}
                 {...props}>
                 <div className="xellanix-toggle-switch-handle"></div>
             </div>

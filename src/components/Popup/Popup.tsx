@@ -119,13 +119,17 @@ function PopupSection({
         <div
             id="popup"
             className="popup vertical-layout"
-            style={{ height: totalHeight ?? "auto", minWidth: "100px" }}>
+            style={{ height: totalHeight ?? "auto", minWidth: "100px" }}
+            role="dialog"
+            aria-label={`${iconText} Popup`}>
             <div className="horizontal-layout">
                 {canBack && (
                     <div
                         className="default-back-button vertical-layout flex-align-middle flex-align-center"
-                        onClick={backHandler}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-color)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="tabler-icon tabler-icon-arrow-left "><path d="M5 12l14 0"></path><path d="M5 12l6 6"></path><path d="M5 12l6 -6"></path></svg>
+                        onClick={backHandler}
+                        role="button"
+                        aria-label="Back">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-color)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="tabler-icon tabler-icon-arrow-left "><path d="M5 12l14 0"></path><path d="M5 12l6 6"></path><path d="M5 12l6 -6"></path></svg>
                     </div>
                 )}
                 <div className="icon-landscape">
@@ -134,8 +138,10 @@ function PopupSection({
                 </div>
                 <div
                     className="default-close-button vertical-layout flex-align-middle flex-align-center"
-                    onClick={closeAnyPopup}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-color)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="tabler-icon tabler-icon-x "><path d="M18 6l-12 12"></path><path d="M6 6l12 12"></path></svg>
+                    onClick={closeAnyPopup}
+                    role="button"
+                    aria-label="Close popup">
+                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-color)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="tabler-icon tabler-icon-x "><path d="M18 6l-12 12"></path><path d="M6 6l12 12"></path></svg>
                 </div>
             </div>
             <div id="popup-container">

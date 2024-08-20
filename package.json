@@ -1,6 +1,6 @@
 {
 	"name": "xellanix-react",
-	"version": "2.2.1",
+	"version": "2.2.3",
 	"description": "A react stylesheet and components from xellanix",
 	"main": "dist/xellanix.umd.js",
 	"module": "dist/xellanix.es.js",
@@ -40,7 +40,7 @@
 	],
 	"author": "xellanix",
 	"license": "MIT",
-	"homepage": "https://github.com/xellanix/xellanix-react#",
+	"homepage": "https://xellanix.github.io/xellanix-react-docs/",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/xellanix/xellanix-react.git"
