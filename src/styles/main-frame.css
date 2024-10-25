@@ -8,12 +8,12 @@ html {
 }
 
 .light-theme {
-	--primary-background-color: #f7f7f7;
+	--primary-background-color: hsl(195, 10%, 97%);
 
-	--secondary-background-color: #f7f7f7;
+	--secondary-background-color: hsl(195, 10%, 97%);
 	--secondary-background-color2: #ffffff;
 
-	--ternary-background-color: #e9e9e9;
+	--ternary-background-color: hsl(195, 10%, 91%);
 	--ternary-background-color2: #d6d6d6;
 
 	--text-color: #303030;
@@ -76,6 +76,9 @@ html {
 	--information-background-color: rgba(77, 195, 255, 0.15);
 
 	color-scheme: dark;
+}
+.accent {
+	color: var(--accent-color);
 }
 
 body {

@@ -20,7 +20,7 @@ export default defineConfig({
 			fileName: (format) => `xellanix.${format}.js`,
 		},
 		rollupOptions: {
-			external: ["react", "react-dom"],
+			external: ["react", /^react\/.*/, "react-dom", /react-dom\/.*/],
 			output: {
 				globals: {
 					react: "React",

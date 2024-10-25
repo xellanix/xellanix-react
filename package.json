@@ -1,15 +1,12 @@
 {
 	"name": "xellanix-react",
-	"version": "2.2.3",
+	"version": "2.2.4",
 	"description": "A react stylesheet and components from xellanix",
 	"main": "dist/xellanix.umd.js",
 	"module": "dist/xellanix.es.js",
 	"types": "dist/types/index.d.ts",
 	"scripts": {
 		"build": "tsc -b && vite build"
-	},
-	"peerDependencies": {
-		"react": "^18.3.1"
 	},
 	"devDependencies": {
 		"@types/node": "^22.0.0",
